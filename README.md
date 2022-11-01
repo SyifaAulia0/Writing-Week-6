@@ -9,8 +9,6 @@
   import PropTypes from "prop-types";
   ```
 - jika ada kesalahan pada type data, maka prop-types akan memberitahu bahwa terjadi error di console
-```jsx
-```
 - type data string
 ```jsx
 StudentInfo.propTypes = {
@@ -70,3 +68,23 @@ StudentInfo.propTypes = {
   }).isRequired, 
 };
 ```
+## React Router
+- router : fungsi router untuk pindah2 halaman
+- cara menggunakan react router
+  1. install reactrouter, ada dialam folder project
+  2. import browser router di main.js
+  3. routes : untuk nampung loopingan yang ada
+  4. import routes di app.jsx
+### Params Router
+- params router : fungsinya untuk mengirim sebuah parameter lewat loopingan
+buat detailpage
+import detailpage di app
+:id : mengirim parameter
+Pindah2 halaman pakai use navigate
+
+Buat pages baru about student
+About teacher
+Nested router
+Pakai outlet : untuk nampilin anak2 di about
+Import outlet
+Panggil outlet di aboutpage
