@@ -70,21 +70,249 @@ StudentInfo.propTypes = {
 ```
 ## React Router
 - router : fungsi router untuk pindah2 halaman
+- keunggulan router daripada tag a pada html adalah lebih cepat ketika berpindah halamn, tidak perlu refresh lama halaman
 - cara menggunakan react router
-  1. install reactrouter, ada dialam folder project
-  2. import browser router di main.js
-  3. routes : untuk nampung loopingan yang ada
-  4. import routes di app.jsx
+  1. install react router didalam folder project
+  ```jsx
+  npm install reat-roter-dom
+  ```
+  2. import browser router di main.jsx
+  ```jsx
+  //main.jsx
+  import { BrowserRouter } from "react-router-dom";
+  ReactDOM.createRoot(document.getElementById("root")).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+  );
+  ```
+  3. import routes di app.jsx. routes : untuk nampung loopingan yang ada
+  ```jsx
+  //app.jsx
+  import { Routes, Route, Link } from "react-router-dom";
+  const App = () => {
+  return (
+    <>
+      <nav>
+        <Link to={"/"}>Home |</Link>  //Link seperti tag a pada html
+        <Link to={"/about"}>About</Link>
+      </nav>
+      
+      <Routes>
+        <Route path="/" element={<HomePage />} />   //halaman pertama yang dimunculkan hanya diberi "/"
+        <Route path="/detail/:id" element={<DetailPage />} />
+      </Routes>
+    </>
+  );
+  };
+
+  export default App;       
+  ```
 ### Params Router
 - params router : fungsinya untuk mengirim sebuah parameter lewat loopingan
-buat detailpage
-import detailpage di app
-:id : mengirim parameter
-Pindah2 halaman pakai use navigate
+- cara menggunakan params
+  1. buat folder (dengan nama detailpage)
+  2. import detailpage di app.jsx
+  ```jsx
+  //app.jsx
+  import DetailPage from "./pages/DetailPage";
+  const App = () => {
+  return (
+    <>
+      </Routes>
+      <Route path="/detail/:id" element={<DetailPage />} /> // :id adalah untuk mengirim parameter
+      </Routes>
+    </>
+  );
+  };
 
-Buat pages baru about student
-About teacher
-Nested router
-Pakai outlet : untuk nampilin anak2 di about
-Import outlet
-Panggil outlet di aboutpage
+  export default App;
+  ```
+  ```jsx
+  //detailpage.jsx
+  import { useParams } from "react-router-dom";
+
+  const DetailPage = () => {
+  // useParams untuk menangkap id yang kita kirim dari halaman home
+  const { id } = useParams();
+  console.log(id);
+
+  const detailInfo = [
+    {
+      id: 1,
+      name: "Mika",
+      address: "jakarta",
+      hobby: "menari",
+    },
+    {
+      id: 2,
+      name: "Reyhan",
+      address: "bandung",
+      hobby: "memancing",
+    },
+    {
+      id: 3,
+      name: "Asep",
+      address: "malang",
+      hobby: "membaca",
+    },
+  ];
+  // 1. filter data dari detailInfo dan dicocokkan dengan id yg kita kirim dari home (yang ditangkap di params)
+  // 2. Mapping data untuk menampilkan hasil yang sesuai dari data filter
+  return (
+    <>
+      {detailInfo
+        .filter((el) => el.id === +id)
+        .map((el) => {
+          return (
+            <div key={el.id}>
+              <h2>Name: {el.name}</h2>
+              <h2>Address: {el.address}</h2>
+              <h2>Hobby: {el.hobby}</h2>
+            </div>
+          );
+        })}
+    </>
+  );
+  };
+
+  export default DetailPage;
+  ```
+- Pindah2 halaman pakai use navigate
+```jsx
+import { useNavigate, Link } from "react-router-dom";
+
+const HomePage = () => {
+  // panggil useNavigate agar bisa digunakan pada function handleDetail
+  const navigation = useNavigate();
+  let data = [
+    {
+      id: 1,
+      name: "Mika",
+    },
+    {
+      id: 2,
+      name: "Reyhan",
+    },
+    {
+      id: 3,
+      name: "Asep",
+    },
+  ];
+
+  const handleDetail = (id) => {
+    // untuk pindah halaman ke page detail sekaligus membawa id params
+    navigation(`/detail/${id}`);
+  };
+  return (
+    <>
+      <h1>Ini Home Page</h1>
+      {data.map((el) => {
+        return (
+          <div key={el.id}>
+            <h2>Nama: {el.name}</h2>
+            <button onClick={() => handleDetail(el.id)}>Detail</button>
+          </div>
+        );
+      })}
+      <Link to={"about/student"}>About Student |</Link>
+      <Link to={"about/teacher"}>About Teacher</Link>
+    </>
+  );
+};
+
+export default HomePage;
+```
+### Nested router
+- cara menggunakan nested router
+  1. Buat folder baru
+  ```jsx
+  //app.jsx
+  import { Routes, Route, Link } from "react-router-dom";
+  import AboutStudent from "./pages/AboutStudent";
+  import AboutTeacher from "./pages/AboutTeacher";
+  import AboutSchool from "./pages/AboutSchool";
+  const App = () => {
+  return (
+    <>
+       <Routes>
+         <Route path="/about" element={<AboutPage />}>
+          <Route path="student" element={<AboutStudent />} />
+          <Route path="teacher" element={<AboutTeacher />} />
+          <Route index element={<AboutSchool />} /> //index digunakan agar element AboutSchool langsung ditampilkan pertama kali ketika page about dibuka
+       </Route>
+       </Routes>
+    </>
+  );
+  };
+
+  export default App;
+  ```jsx 
+  //aboutschool.jsx
+  const AboutSchool = () => {
+  return (
+    <>
+      <h1>About School</h1>
+    </>
+  );
+  };
+
+  export default AboutSchool;
+  ```
+  ```jsx
+  //aboutteacher.jsx
+  const AboutTeacher = () => {
+  return (
+    <>
+      <h1>About Teacher</h1>
+    </>
+  );
+  };
+
+  export default AboutTeacher;
+  ```
+  ```jsx
+  const AboutStudent = () => {
+  return (
+    <>
+      <h1>About Student</h1>
+    </>
+  );
+  };
+
+  export default AboutStudent;
+  ```
+- Pakai outlet : untuk nampilin anak2 di about
+```jsx
+import { Outlet, Link } from "react-router-dom";
+
+const AboutPage = () => {
+  return (
+    <>
+      <Outlet />
+      <Link to={"student"}>About Student |</Link>
+      <Link to={"teacher"}>About Teacher</Link>
+    </>
+  );
+};
+
+export default AboutPage;
+```
+### not-found
+```jsx
+//app.jsx
+import NotFound from "./pages/NotFound";
+const App = () => {
+  return (
+    <>
+      <Routes>
+        <Route path="*" element={<NotFound />} /> //tambahkan path="*" untuk menampilkan halaman yg tidak ditemukan. case nya adalah ketika user mengakses path tertentu yang tidak terdaftar di routingan yang kita miliki
+      </Routes>
+    </>
+  );
+};
+
+export default App;
+```
