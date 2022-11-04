@@ -316,3 +316,93 @@ const App = () => {
 
 export default App;
 ```
+## Redux
+- Untuk mengatasi props drilling, bisa menggunakan state management seperti redux, context, jotai, zustand
+- redux adalah sebuah third party untuk memanipulasi state management didalam react
+- Konsep redux : Akan membuat tempat terpusat, lalu ketika ada component yang membutuhkan tinggal ngambil dari tempat tersebut
+### cara menggunakan React redux
+1. Install redux : bisa menggunakan redux core, redux toolkit
+```jsx
+//ini menggunakan redux core
+npm install redux
+```
+2. Install react redux
+```jsx
+npm install react-redux
+```
+3. install store
+- Harus menyediakan storenya dahulu
+```jsx
+//index.js
+import { createStore } from 'redux'
+import keranjangReducer from '../reducer/keranjangReducer'
+
+const store = createStore(keranjangReducer)
+
+export default store
+```
+4. Buat reducer
+```jsx
+//KeranjangReducer.js
+const initialState = {
+  totalKeranjang: 0,
+};
+function keranjangReducer(state = initialState, action) {
+  switch (action.type) {       //Action ; sebuah function yang memiliki objek property type. Action akan dikirim ke reducer
+    default:state
+    break;
+  }
+}
+
+export default keranjangReducer;
+```
+5. Buat provider, menggunakan react redux di main jsx import provider
+```jsx
+//main.jsx
+import { Provider } from 'react-redux'
+```
+```jsx
+//main.jsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { Provider } from 'react-redux'
+import App from './App'
+import store from './redux/store'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  // <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+  // </React.StrictMode>
+)
+```
+6. Buat components
+```
+//Counter.jsx
+//Keranjang.jsx
+//ListProduct.jsx
+//SummaryPembelian.jsx
+```
+7. Pakai useSelector
+```jsx
+import React from 'react'
+import { useSelector } from 'react-redux'
+
+function Keranjang() {
+  const {totalKeranjang} = useSelector(state => state)
+
+  // console.log(state)
+
+  return (
+    <div>
+      <span>Keranjang</span>
+      <span> {totalKeranjang}</span>
+    </div>
+  )
+}
+
+export default Keranjang
+```
+8. 
+Dispatch : mengieim action ke dalam reducer
