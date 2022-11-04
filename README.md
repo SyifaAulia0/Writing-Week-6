@@ -384,7 +384,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
 //ListProduct.jsx
 //SummaryPembelian.jsx
 ```
-7. Pakai useSelector
+7. useSelector
 ```jsx
 import React from 'react'
 import { useSelector } from 'react-redux'
@@ -404,5 +404,27 @@ function Keranjang() {
 
 export default Keranjang
 ```
-8. 
-Dispatch : mengieim action ke dalam reducer
+8. useDispatch
+- Dispatch : mengirim action ke dalam reducer
+```jsx
+//Counter.jsx
+import { useDispatch } from "react-redux";
+```
+### Combine Reducer
+- Combine Reducer : agar bisa menampung banyak store
+- karena createStore hanya bisa menampung 1 store
+```jsx
+//index.jsx
+import { combineReducers, createStore } from "redux";
+import counterReducer from "../reducer/counterReducer";
+import todoReducer from "../reducer/todoReducer";
+
+const allReducer = combineReducers({
+  counter: counterReducer,
+  todo: todoReducer
+})
+
+const store = createStore(allReducer);
+
+export default store;
+```
