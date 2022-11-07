@@ -435,11 +435,11 @@ export default store;
 - middleware thunk dapat menghandle action dispatch bersifat asynchronus
 #### cara menggunakan thunk
 1. install tthunk
-```
+```jsx
 npm install redux-thunk
 ```
 2. import redux-thunk, kemudian taruh applyMiddlewaare pada store
-````jsx
+```jsx
 //index.js pada store
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -453,7 +453,7 @@ const allReducer = combineReducers({
 
 const store = createStore(allReducer, applyMiddleware(thunk))
 
-export default store
+export default store;
 ```
 3. cara kerja async(dispatch) :
   - ubah loading jadi true
@@ -462,9 +462,9 @@ export default store
   - berhasil -> loading jadi flase (pada reducer)
   - setelah berhasil, ke proses axios
   - harus install axios dahulu
-  ```
-  npm install axios
-  ```
+```jsx
+ npm install axios
+```
 ```jsx
 //todoAction
 import axios from "axios";
@@ -499,6 +499,7 @@ export const getTodo = () => {
   };
 };
 ```
+
 ```jsx
 todoReducer.js
 import { FETCH_START, SUCCESS_GET_TODO } from "../action/todoAction";
@@ -529,4 +530,34 @@ const todoReducer = (state = initialState, action) => {
 
 export default todoReducer;
 ```
+4. tampilkan todoList
+```jsx
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getTodo } from "../redux/action/todoAction";
 
+function TodoList() {
+  const dispatch = useDispatch();
+  const { todos, isLoading } = useSelector((state) => state.todo);
+
+  useEffect(() => {
+    dispatch(getTodo());
+  }, []);
+
+  return (
+    <div>
+      <h2>Todo List</h2>
+
+      <ul>
+        {isLoading ? (
+          <span>Loading...</span>
+        ) : (
+          todos.map((item) => <li key={item.id}>{item.todo}</li>)
+        )}
+      </ul>
+    </div>
+  );
+}
+
+export default TodoList;
+```
